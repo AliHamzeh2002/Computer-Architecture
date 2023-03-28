@@ -4,10 +4,10 @@ module stack_2bit (clk, rst, push, pop, data_in, data_out, empty, full);
     output reg [1:0] data_out;
     output reg empty, full;
     reg [1:0] stack_data [0:256];
-    reg top_index;
+    reg [8:0] top_index;
     assign empty = (top_index == 0);
     assign full = (top_index == 256);
-    always @(clk) begin
+    always @(posedge clk) begin
         if (rst)
             top_index <= 0;
         else if(pop && !empty) begin
