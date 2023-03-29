@@ -7,7 +7,7 @@ module stack_2bit (clk, rst, push, pop, data_in, data_out, empty, full);
     reg [8:0] top_index;
     assign empty = (top_index == 0);
     assign full = (top_index == 256);
-    always @(posedge clk, posedge rst) begin
+    always @(posedge clk or posedge rst) begin
         if (rst)
             top_index <= 0;
         else if(pop && !empty) begin
