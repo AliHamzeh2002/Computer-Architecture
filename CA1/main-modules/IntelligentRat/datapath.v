@@ -1,8 +1,8 @@
-module datapath (clk, rst_reg, rst_counter, ld_reg, ld_counter, adder_sel,
+module datapath (clk, rst_reg, rst_counter, ld_reg, ld_counter, inc_counter, adder_sel,
                  inc_dec_sel, x_sel, y_sel, pop, push, rd_mem, wr_mem, mem_din,
-                 push_val, co, counter_val, pop_val, empty, wall, finish);
-    input clk, rst_reg, rst_counter, ld_reg, ld_counter, adder_sel, inc_dec_sel, x_sel, y_sel, pop, push, rd_mem, wr_mem, mem_din;
-    input [1:0] push_val;
+                 push_val, counter_ld_val, co, counter_val, pop_val, empty, wall, finish);
+    input clk, rst_reg, rst_counter, ld_reg, ld_counter, inc_counter, adder_sel, inc_dec_sel, x_sel, y_sel, pop, push, rd_mem, wr_mem, mem_din;
+    input [1:0] push_val, counter_ld_val;
     output co, wall, finish, empty;
     output reg[1:0] counter_val, pop_val;
     wire[3:0] cur_x, cur_y, mem_x, mem_y, adder_inp, inc_dec, adder_res;   
@@ -17,6 +17,7 @@ module datapath (clk, rst_reg, rst_counter, ld_reg, ld_counter, adder_sel,
     check_range(adder_res, inc_dec, cout, out_of_range);
     maze_memory(clk, rst_reg, rd_mem, wr_mem, mem_x, mem_y, mem_din, mem_dout);
     stack(clk, rst_reg, push, pop, push_val, pop_val, empty, full);
+    counter(clk, rst_counter, ld_counter, inc_counter, counter_ld_val, counter_val, co);
     assign wall = out_of_range | mem_dout;
     assign finish = &{cur_x,cur_y};
 endmodule
