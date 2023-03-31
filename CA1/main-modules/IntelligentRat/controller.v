@@ -28,7 +28,6 @@ module controller (clk, rst, start, run, wall, finish, co, empty, counter_val, p
         if (rst)
             ps <= `S11;
         else
-           // $display("fucking ns is: %d", ns);
             ps <= ns;
     end
     always @(ps or start or finish or wall or co or empty) begin
