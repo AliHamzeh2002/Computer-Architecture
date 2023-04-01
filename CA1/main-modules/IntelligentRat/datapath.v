@@ -26,7 +26,7 @@ module datapath (clk, rst_reg, rst_counter, rst_frontq, ld_reg, ld_counter, ld_q
     check_range chr(adder_res, inc_dec, cout, out_of_range);
     maze_memory mem(clk, rst_reg, rd_mem, wr_mem, mem_x, mem_y, mem_din, mem_dout);
     stack_2bit stk(clk, rst_reg, push, pop, push_val, pop_val, empty, full, stack_data, stk_top_index);
-    queue_2bit queue(clk, rst, rst_frontq, dequeue, ld_q, stack_data, rear_index_in, q_out, finishq);
+    queue_2bit queue(clk, rst, rst_frontq, dequeue, ld_q, stack_data, stk_top_index, q_out, finishq);
     counter counter(clk, rst_counter, ld_counter, inc_counter, counter_ld_val, counter_val, co);
     assign wall = out_of_range | mem_dout;
     assign finish = &{cur_x,cur_y};
