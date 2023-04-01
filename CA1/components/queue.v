@@ -1,12 +1,14 @@
-module queue_2bit (clk, rst, rst_front, enqueue, dequeue, data_in, data_out, finish, full);
-    input clk, rst, rst_front, enqueue, dequeue;
-    input [1:0] data_in;
+module queue_2bit (clk, rst, rst_front, dequeue, ld, ld_data, rear_index_in, data_out, finish, full);
+    input clk, rst, rst_front, dequeue, ld;
+    input [8:0] rear_index_in;
+    input [1:0] ld_data [0:256];
     output reg[1:0] data_out;
     output finish, full;
     reg [1:0] queue_data[0:256];
     reg [8:0] rear_index, front_index;
     assign finish = (rear_index == front_index);
     assign full = (rear_index == 256);
+    integer i;
     always @(posedge clk, posedge rst) begin
         if (rst)begin
             rear_index <= 0;
@@ -18,9 +20,10 @@ module queue_2bit (clk, rst, rst_front, enqueue, dequeue, data_in, data_out, fin
             data_out <= queue_data[front_index];
             front_index <= front_index + 1;
         end
-        else if (enqueue && !full)begin
-            queue_data[rear_index] <= data_in;
-            rear_index <= rear_index + 1;
-        end
+        else if(ld)begin
+            for (i = 0; i < 256; i = i + 1)
+                queue_data[i] <= ld_data[i];
+            rear_index <= rear_index_in;
+        end 
     end
 endmodule
