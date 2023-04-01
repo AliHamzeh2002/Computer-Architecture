@@ -14,12 +14,12 @@
 `define S13 4'b1101
 `define S14 4'b1110
 `define S15 4'b1111
-module controller (clk, rst, start, run, wall, finish, co, empty, counter_val, pop_val,
-                  rst_reg, rst_counter, ld_reg, ld_counter, inc_counter, adder_sel, inc_dec_sel,
-                  x_sel, y_sel, pop, push, rd_mem, wr_mem, mem_din, push_val, counter_ld_val, done, move, fail, wall_o);
-    input clk, rst, start, run, wall, finish, co, empty; 
+module controller (clk, rst, start, run, wall, finish, co, empty, finishq, counter_val, pop_val,
+                  rst_reg, rst_counter, rst_frontq, ld_reg, ld_counter, ld_q, inc_counter, adder_sel, inc_dec_sel,
+                  x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, mem_din, push_val, counter_ld_val, done, move, fail, wall_o);
+    input clk, rst, start, run, wall, finish, co, empty, finishq; 
     input [1:0] counter_val, pop_val;
-    output reg rst_reg, rst_counter, ld_reg, ld_counter, inc_counter, adder_sel, inc_dec_sel, x_sel, y_sel, pop, push, rd_mem, wr_mem, mem_din;
+    output reg rst_reg, rst_frontq, rst_counter, ld_reg, ld_counter, ld_q, inc_counter, adder_sel, inc_dec_sel, x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, mem_din;
     output reg [1:0] push_val, move, counter_ld_val;
     output reg done, fail , wall_o;
     assign wall_o = wall;
@@ -30,9 +30,11 @@ module controller (clk, rst, start, run, wall, finish, co, empty, counter_val, p
         else
             ps <= ns;
     end
-    always @(ps or start or finish or wall or co or empty) begin
+    always @(ps or start or finish or wall or co or empty or finishq) begin
         case (ps)
-            `S0: ns = start ? `S1 : `S0;
+            `S0: ns = start ? `S1 :
+                      run   ? `S13:
+                              `S0;
             `S1: ns = `S2;
             `S2: ns = finish ? `S10 : `S3;
             `S3: ns = `S4;  
@@ -42,15 +44,18 @@ module controller (clk, rst, start, run, wall, finish, co, empty, counter_val, p
             `S7: ns = `S0;
             `S8: ns = `S5;
             `S9: ns = `S2;
-            `S10: ns = `S0;
-            `S11: ns = `S0;   
+            `S10: ns = `S12;
+            `S11: ns = `S0; 
+            `S12: ns = `S0;
+            `S13: ns = `S14;
+            `S14: ns = finishq ? `S0 : `S14;
             default: ns = `S0;
         endcase
     end
     always @(ps) begin
-        {rst_reg, rst_counter, ld_reg, ld_counter, inc_counter,
-        x_sel, y_sel, pop, push, rd_mem, wr_mem, adder_sel, inc_dec_sel,
-        mem_din, push_val, counter_ld_val, move, done, fail} = 21'b000_000_000_000_000_000_000;
+        {rst_reg, rst_frontq, rst_counter, ld_reg, ld_counter, ld_q, inc_counter,
+        x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, adder_sel, inc_dec_sel,
+        mem_din, push_val, counter_ld_val, move, done, fail} = 24'b000_000_000_000_000_000_000_000;
         case (ps)
             `S0:;
             `S1: {rst_reg, rst_counter} = 2'b11;
@@ -95,8 +100,11 @@ module controller (clk, rst, start, run, wall, finish, co, empty, counter_val, p
                     push_val = counter_val;
                     rst_counter = 1'b1;
                 end
-            `S10: done = 1'b1;
+            `S10: ld_q = 1'b1;
             `S11: rst_reg = 1'b1;
+            `S12: done = 1'b1;
+            `S13: rst_frontq = 1'b1;
+            `S14: dequeue = 1'b1;
             default:;
         endcase
     end

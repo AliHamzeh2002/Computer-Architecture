@@ -1,12 +1,15 @@
-module datapath (clk, rst_reg, rst_counter, ld_reg, ld_counter, inc_counter, adder_sel,
-                 inc_dec_sel, x_sel, y_sel, pop, push, rd_mem, wr_mem, mem_din,
-                 push_val, counter_ld_val, co, counter_val, pop_val, empty, wall, finish, mem_dout, range, x_o, y_o, rd_fl);
-    input clk, rst_reg, rst_counter, ld_reg, ld_counter, inc_counter, adder_sel, inc_dec_sel, x_sel, y_sel, pop, push, rd_mem, wr_mem, mem_din;
+module datapath (clk, rst_reg, rst_counter, rst_frontq, ld_reg, ld_counter, ld_q, inc_counter, adder_sel,
+                 inc_dec_sel, x_sel, y_sel, dequeue, pop, push, rd_mem, wr_mem, mem_din,
+                 push_val, counter_ld_val, q_out, co, counter_val, pop_val, empty,
+                 finishq, wall, finish, mem_dout, range, x_o, y_o, rd_fl);
+    input clk, rst_reg, rst_counter, ld_reg, ld_counter, inc_counter, adder_sel, inc_dec_sel, x_sel, y_sel, pop, push, rd_mem, wr_mem, mem_din, rst_frontq, ld_q, dequeue;
     input [1:0] push_val, counter_ld_val;
-    output co, wall, finish, empty;
-    output [1:0] counter_val, pop_val;
+    output co, wall, finish, empty, finishq;
+    output [1:0] counter_val, pop_val, q_out;
     wire[3:0] cur_x, cur_y, mem_x, mem_y, adder_inp, inc_dec, adder_res;   
     wire cout, out_of_range, full;//, mem_dout;
+    wire [1:0] stack_data [0:256];
+    wire [1:0] stk_top_index;
     output mem_dout, range, rd_fl;
     output [3:0] x_o, y_o;
     assign x_o = mem_x;
@@ -22,7 +25,8 @@ module datapath (clk, rst_reg, rst_counter, ld_reg, ld_counter, inc_counter, add
     adder addr(adder_inp, inc_dec, 0, adder_res, cout);
     check_range chr(adder_res, inc_dec, cout, out_of_range);
     maze_memory mem(clk, rst_reg, rd_mem, wr_mem, mem_x, mem_y, mem_din, mem_dout);
-    stack_2bit stk(clk, rst_reg, push, pop, push_val, pop_val, empty, full);
+    stack_2bit stk(clk, rst_reg, push, pop, push_val, pop_val, empty, full, stack_data, stk_top_index);
+    queue_2bit queue(clk, rst, rst_frontq, dequeue, ld_q, stack_data, rear_index_in, q_out, finishq);
     counter counter(clk, rst_counter, ld_counter, inc_counter, counter_ld_val, counter_val, co);
     assign wall = out_of_range | mem_dout;
     assign finish = &{cur_x,cur_y};
