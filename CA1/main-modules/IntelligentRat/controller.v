@@ -16,11 +16,11 @@
 `define S15 4'b1111
 module controller (clk, rst, start, run, wall, finish, co, empty, finishq, counter_val, pop_val,
                   rst_reg, rst_counter, rst_frontq, ld_reg, ld_counter, ld_q, inc_counter, adder_sel, inc_dec_sel,
-                  x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, mem_din, push_val, counter_ld_val, done, move, fail, wall_o);
+                  x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, mem_din, push_val, counter_ld_val, done, fail, wall_o);
     input clk, rst, start, run, wall, finish, co, empty, finishq; 
     input [1:0] counter_val, pop_val;
     output reg rst_reg, rst_frontq, rst_counter, ld_reg, ld_counter, ld_q, inc_counter, adder_sel, inc_dec_sel, x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, mem_din;
-    output reg [1:0] push_val, move, counter_ld_val;
+    output reg [1:0] push_val, counter_ld_val;
     output reg done, fail , wall_o;
     assign wall_o = wall;
     reg [3:0] ns, ps;
@@ -30,7 +30,7 @@ module controller (clk, rst, start, run, wall, finish, co, empty, finishq, count
         else
             ps <= ns;
     end
-    always @(ps or start or finish or wall or co or empty or finishq) begin
+    always @(ps or start or finish or wall or co or empty or finishq or run) begin
         case (ps)
             `S0: ns = start ? `S1 :
                       run   ? `S13:
@@ -55,7 +55,7 @@ module controller (clk, rst, start, run, wall, finish, co, empty, finishq, count
     always @(ps) begin
         {rst_reg, rst_frontq, rst_counter, ld_reg, ld_counter, ld_q, inc_counter,
         x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, adder_sel, inc_dec_sel,
-        mem_din, push_val, counter_ld_val, move, done, fail} = 24'b000_000_000_000_000_000_000_000;
+        mem_din, push_val, counter_ld_val, done, fail} = 22'b0_000_000_000_000_000_000_000;
         case (ps)
             `S0:;
             `S1: {rst_reg, rst_counter} = 2'b11;
@@ -108,7 +108,10 @@ module controller (clk, rst, start, run, wall, finish, co, empty, finishq, count
             default:;
         endcase
     end
-    // always @(ps) begin
-    //      $display("ps: %d", ps);
+    always @(ps) begin
+         $display("ps: %d", ps);
+    end
+    // always @(run) begin
+    //     $display("run : %d", run);  
     // end
 endmodule

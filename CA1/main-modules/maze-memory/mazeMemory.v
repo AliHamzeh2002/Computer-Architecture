@@ -6,7 +6,7 @@ module maze_memory(clk, rst, rd, wr, x_pos, y_pos, data_in, data_out);
    // integer i;
     always @(posedge clk or posedge rst or posedge rd) begin
         if (rst)
-            $readmemh("testcases/map.data", memory);
+            $readmemh("map.data", memory);
         else if (rd)
             data_out = memory[y_pos][x_pos];
         else if (wr)

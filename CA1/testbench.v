@@ -10,10 +10,14 @@ module rat_in_mazeTB ();
         rst = 0;
         run = 0;
         clk = 0;
-        #20 start = 1;
+        #30 start = 1;
         #20 start = 0;  
-        #1000000 $stop;
+        #100000 run = 1;
+        #40 run = 0;
+        #100000 $stop;
     end
+
+
 
     
 endmodule
