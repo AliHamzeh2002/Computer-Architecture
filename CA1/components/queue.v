@@ -26,13 +26,4 @@ module queue_2bit (clk, rst, rst_front, dequeue, ld, ld_data, rear_index_in, dat
             
         end 
     end
-    // always @(rear_index) begin
-    //     // for (i = 0; i < 256; i = i + 1)
-    //     //         $display("%d", ld_data[i]);
-    //     $display("REARINDEX: %d", rear_index);
-    //     $display("MOVES:");
-    //         for (i = 0; i < 256; i = i + 1)
-    //             $display("%d", queue_data[i]);
-
-    // end
 endmodule

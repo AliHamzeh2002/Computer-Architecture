@@ -16,12 +16,12 @@
 `define S15 4'b1111
 module controller (clk, rst, start, run, wall, finish, co, empty, finishq, counter_val, pop_val,
                   rst_reg, rst_counter, rst_frontq, ld_reg, ld_counter, ld_q, inc_counter, adder_sel, inc_dec_sel,
-                  x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, mem_din, push_val, counter_ld_val, done, fail, wall_o);
+                  x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, mem_din, push_val, counter_ld_val, done, fail);
     input clk, rst, start, run, wall, finish, co, empty, finishq; 
     input [1:0] counter_val, pop_val;
     output reg rst_reg, rst_frontq, rst_counter, ld_reg, ld_counter, ld_q, inc_counter, adder_sel, inc_dec_sel, x_sel, y_sel, pop, push, dequeue, rd_mem, wr_mem, mem_din;
     output reg [1:0] push_val, counter_ld_val;
-    output reg done, fail , wall_o;
+    output reg done, fail;
     assign wall_o = wall;
     reg [3:0] ns, ps;
     always @(posedge clk or posedge rst) begin
@@ -108,10 +108,7 @@ module controller (clk, rst, start, run, wall, finish, co, empty, finishq, count
             default:;
         endcase
     end
-    always @(ps) begin
-         $display("ps: %d", ps);
-    end
-    // always @(run) begin
-    //     $display("run : %d", run);  
+    // always @(ps) begin
+    //      $display("ps: %d", ps);
     // end
 endmodule
