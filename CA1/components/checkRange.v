@@ -1,7 +1,6 @@
-module check_range (val, op, cout, out_of_range);
+module check_range (val, op, out_of_range);
     input [3:0] val;
-    input [3:0] op;
-    input cout;
+    input op;
     output out_of_range;
-    assign out_of_range = (op == 4'b0001 && val == 4'b0000) | (op == 4'b1111 && val == 4'b1111);
+    assign out_of_range = (op == 1'b1 && val == 4'b0000) | (op == 1'b0 && val == 4'b1111);
 endmodule
