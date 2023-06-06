@@ -1,0 +1,12 @@
+lui s0, 0x00000
+    add s1, zero, zero
+    lw s2, 0(s0)
+    addi t2, zero, 0x00028
+    loop: bge s1, t2, END1
+    add t0, s0, s1
+    lw t1, 0(t0)
+    blt t1, s2, END2
+    add s2, zero, t1
+    END2: addi s1, s1, 0x00004
+    jal loop
+    END1:
