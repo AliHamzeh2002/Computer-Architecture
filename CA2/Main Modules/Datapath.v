@@ -1,4 +1,4 @@
-module Datapath(clk, rst, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, op, func7, func3, Zero, lt);
+module Datapath_SC(clk, rst, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, op, func7, func3, Zero, lt);
     input clk, rst, PCSrc, MemWrite, ALUSrc, RegWrite;
     input [1:0] ResultSrc;
     input [2:0] ALUControl, ImmSrc;

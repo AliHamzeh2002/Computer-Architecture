@@ -1,4 +1,3 @@
-
 `define lw   7'b0000011
 `define sw   7'b0100011
 `define RT   7'b0110011
@@ -8,7 +7,7 @@
 `define jal  7'b1101111
 `define lui  7'b0110111
 
-module Controller(op, func3, func7, Zero, lt, 
+module Controller_SC(op, func3, func7, Zero, lt, 
     PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, done);
     
     input [6:0] op, func7;
