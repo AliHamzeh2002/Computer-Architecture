@@ -1,4 +1,4 @@
-module riscV_SC_TB();
+module riscV_PL_TB();
 
     reg clk = 1'b0, rst = 1'b1;
     wire done;
@@ -7,7 +7,14 @@ module riscV_SC_TB();
 
     always #20 clk = ~clk;
 
-    always @(posedge done) #10 $stop;
-	initial #10 rst = 1'b0;
+   // always @(posedge done) #10 $stop;
+	initial begin
+        
+        
+        #10 rst = 1'b0;
+        #100000 $stop;
+
+
+    end
 
 endmodule

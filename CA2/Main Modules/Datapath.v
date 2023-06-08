@@ -16,8 +16,6 @@ module Datapath_SC(clk, rst, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, Imm
 
     wire [31:0] FOUR = 32'd4;
 
-
-
     mux_2to1_32bit mux1(PCPLus4, PCTarget, PCSrc, PCNext);
     PC_Register PCreg(clk, rst, PCNext, PC);
     Instruction_Memory IM(PC, Instr);

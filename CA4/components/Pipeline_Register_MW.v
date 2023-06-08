@@ -2,10 +2,12 @@ module PipeLine_Register_MW(clk, RegWriteM, ResultSrcM, ALUResultM, ReadDataM, R
                             RegWriteW, ResultSrcW, ALUResultW, ReadDataW, RdW, PCPlus4W);
     input clk, RegWriteM;
     input [1:0] ResultSrcM;
-    input [31:0] ALUResultM, ReadDataM, RdM, PCPlus4M;
+    input [4:0] RdM;
+    input [31:0] ALUResultM, ReadDataM, PCPlus4M;
     output reg RegWriteW;
     output reg [1:0] ResultSrcW;
-    output reg [31:0] ALUResultW, ReadDataW, RdW, PCPlus4W;
+    output reg [4:0] RdW;
+    output reg [31:0] ALUResultW, ReadDataW, PCPlus4W;
 
     always @(posedge clk) begin
         RegWriteW = ReadDataM;

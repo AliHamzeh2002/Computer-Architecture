@@ -1,6 +1,6 @@
 module Hazard_Unit(Rs1D, Rs2D, Rs1E, Rs2E, RdE, PCSrcE, ResultSrcE0, RdM, RdW, RegWriteM, RegWriteW, StallF, StallD, FlushE, ForwardAE, ForwardBE);
     input ResultSrcE0, RegWriteM, RegWriteW, PCSrcE;
-    input [31:0]Rs1D, Rs2D, Rs1E, Rs2E, RdE, RdM, RdW;
+    input [4:0] Rs1D, Rs2D, Rs1E, Rs2E, RdE, RdM, RdW;
     output StallF, StallD, FlushE;
     output reg [1:0] ForwardAE, ForwardBE;
     reg LWStall;

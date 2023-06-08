@@ -1,15 +1,17 @@
 module PipeLine_Register_DE(clk, CLR, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUControlD, ALUSrcD, ImmSrcD, Rd1D, Rd2D, PCD, Rs1D, Rs2D, RdD, ExtImmD, PCPlus4D,
                                     RegWriteE, ResultSrcE, MemWriteE, JumpE, BeqE, BneE, BltE, BgeE, ALUControlE, ALUSrcE, ImmSrcE, Rd1E, Rd2E, PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E);
     input clk, CLR, RegWriteD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUSrcD;
-    input [1:0] ResultSrcD, ImmSrcD;
-    input [2:0] ALUControlD;
-    input [31:0] Rd1D, Rd2D, PCD, Rs1D, Rs2D, RdD, ExtImmD, PCPlus4D;
+    input [1:0] ResultSrcD;
+    input [2:0] ALUControlD, ImmSrcD;
+    input [4:0] Rs1D, Rs2D, RdD;
+    input [31:0] ExtImmD, PCPlus4D, Rd1D, Rd2D, PCD;
     output reg RegWriteE, MemWriteE, JumpE, BeqE, BneE, BltE, BgeE, ALUSrcE;
-    output reg [1:0] ResultSrcE, ImmSrcE;
-    output reg [2:0] ALUControlE;
-    output reg [31:0] Rd1E, Rd2E, PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E;
+    output reg [1:0] ResultSrcE;
+    output reg [2:0] ALUControlE, ImmSrcE;
+    output reg[4:0]   Rs1E, Rs2E, RdE;
+    output reg [31:0] ExtImmE, PCPlus4E, Rd1E, Rd2E, PCE;
 
-    always @(posedge clk) begin
+    always @(posedge clk, posedge rst) begin
         if (CLR)
             {RegWriteE, MemWriteE, JumpE, BeqE, BneE, BltE, BgeE, ALUSrcE, ResultSrcE,
              ImmSrcE, ALUControlE, Rd1E, Rd2E, PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E} = 0;
