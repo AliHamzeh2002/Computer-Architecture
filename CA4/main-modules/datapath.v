@@ -1,9 +1,9 @@
-module datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUControlD, ALUSrcD, ImmSrcD, StallF, StallD, FlushE, ForwardAE, ForwardBE, 
-                op, func3, func7, ZeroE, Rs1D, Rs2D, Rs1E, Rs2E, RdE, ResultSrcE0, RdM, RdW, RegWriteM, RegWriteW);
+module Datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUControlD, ALUSrcD, ImmSrcD, StallF, StallD, FlushE, ForwardAE, ForwardBE, 
+                op, func3, func7, Rs1D, Rs2D, Rs1E, Rs2E, RdE, PCSrcE, ResultSrcE0, RdM, RdW, RegWriteM, RegWriteW);
     input clk, rst, RegWriteD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUSrcD, StallF, StallD, FlushE;
     input [1:0] ResultSrcD, ImmSrcD, ForwardAE, ForwardBE;
     input [2:0] ALUControlD;
-    output ZeroE, ResultSrcE0;
+    output PCSrcE, ResultSrcE0;
     output [6:0] op;
     output [2:0] func3;
     output [6:0] func7;
@@ -17,7 +17,7 @@ module datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, 
 
 
     //execute
-    wire RegWriteE, MemWriteE, JumpE, BeqE, BneE, BltE, BgeE, ALUSrcE, PCSrcE, LTE;
+    wire RegWriteE, MemWriteE, JumpE, BeqE, BneE, BltE, BgeE, ALUSrcE, LTE, ZeroE;
     wire [1:0] ResultSrcE, ImmSrcE;
     wire [2:0] ALUControlE;
     wire [31:0] Rd1E, Rd2E, PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E, srcAE, srcBE, WriteDataE, ALUResultE, PCTargetE;
