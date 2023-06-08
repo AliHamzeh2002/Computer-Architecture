@@ -1,0 +1,34 @@
+module PipeLine_Register_FD(clk, CLR, RegWriteD, ResultSrcD, MemWriteD, JumpD, BranchD, ALUControlD, ALUSrcD, ImmSrcD, PCD, Rs1D, Rs2D, RDd, ExtImmD, PCPlus4D,
+                                    RegWriteE, ResultSrcE, MemWriteE, JumpE, BranchE, ALUControlE, ALUSrcE, ImmSrcE, PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E);
+    input clk, RegWriteD, MemWriteD, JumpD, BranchD, ALUSrcE;
+    input [1:0] ResultSrcD, ImmSrcD;
+    input [2:0] ALUControlD;
+    input [31:0] PCD, Rs1D, Rs2D, RdD, ExtImmD, PCPlus4D;
+    output reg RegWriteE, MemWriteE, JumpE, BranchE, ALUSrcE;
+    output reg [1:0] ResultSrcE, ImmSrcE;
+    output reg [2:0] ALUControlE;
+    output reg [31:0] PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E;
+
+    always @(posedge clk) begin
+        if (CLR)
+            {RegWriteE, MemWriteE, JumpE, BranchE, ALUSrcE, ResultSrcE,
+             ImmSrcE, ALUControlE, PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E} = 0;
+        else begin
+            RegWriteE = RegWriteD;
+            ResultSrcE = ResultSrcD;
+            MemWriteE = MemWriteD;
+            JumpE = JumpD;
+            BranchE = BranchD;
+            ALUControlE = ALUControlD;
+            ALUSrcE = ALUSrcD;
+            ImmSrcE = ImmSrcD;
+            PCE = PCD;
+            Rs1E = Rs2D;
+            Rs2E = Rs2D;
+            RdE = RdD;
+            ExtImmE = ExtImmD;
+            PCPlus4E = PCPlus4D;
+        end
+    end
+    
+endmodule
