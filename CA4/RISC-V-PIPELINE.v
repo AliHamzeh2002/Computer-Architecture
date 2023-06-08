@@ -1,4 +1,4 @@
-module RISK_V_PL(clk, rst, done);
+module RISC_V_PL(clk, rst, done);
     input clk, rst;
     output done;
 

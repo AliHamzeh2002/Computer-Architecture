@@ -15,7 +15,6 @@ module Datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, 
     //decode
     wire [31:0] InstrD, PCD, PCPLus4D, Rd1D, Rd2D, RdD;
 
-
     //execute
     wire RegWriteE, MemWriteE, JumpE, BeqE, BneE, BltE, BgeE, ALUSrcE, LTE, ZeroE;
     wire [1:0] ResultSrcE, ImmSrcE;
