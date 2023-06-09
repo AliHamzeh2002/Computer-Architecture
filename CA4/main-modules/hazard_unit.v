@@ -1,12 +1,12 @@
-module Hazard_Unit(Rs1D, Rs2D, Rs1E, Rs2E, RdE, PCSrcE, ResultSrcE0, RdM, RdW, RegWriteM, RegWriteW, StallF, StallD, FlushE, ForwardAE, ForwardBE);
+module Hazard_Unit(Rs1D, Rs2D, Rs1E, Rs2E, RdE, PCSrcE, ResultSrcE0, RdM, RdW, RegWriteM, RegWriteW, StallF, StallD, FlushD, FlushE, ForwardAE, ForwardBE);
     input ResultSrcE0, RegWriteM, RegWriteW, PCSrcE;
     input [4:0] Rs1D, Rs2D, Rs1E, Rs2E, RdE, RdM, RdW;
-    output StallF, StallD, FlushE;
+    output StallF, StallD, FlushD, FlushE;
     output reg [1:0] ForwardAE, ForwardBE;
     reg LWStall;
     assign StallD = LWStall;
     assign StallF = LWStall;
-    assign FlushD = LWStall;
+    assign FlushD = PCSrcE;
     assign FlushE = LWStall | PCSrcE;
     always @(Rs1D, Rs2D, Rs1E, Rs2E, RdE, ResultSrcE0, RdM, RdW, RegWriteM, RegWriteW) begin
         if (Rs1E == RdM && RegWriteM && Rs1E != 0)

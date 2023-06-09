@@ -1,6 +1,6 @@
-module Datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUControlD, ALUSrcD, ImmSrcD, StallF, StallD, FlushE, ForwardAE, ForwardBE, 
+module Datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUControlD, ALUSrcD, ImmSrcD, StallF, StallD, FlushD, FlushE, ForwardAE, ForwardBE, 
                 op, func3, func7, Rs1D, Rs2D, Rs1E, Rs2E, RdE, PCSrcE, ResultSrcE0, RdM, RdW, RegWriteM, RegWriteW);
-    input clk, rst, RegWriteD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUSrcD, StallF, StallD, FlushE;
+    input clk, rst, RegWriteD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUSrcD, StallF, StallD, FlushD, FlushE;
     input [1:0] ResultSrcD, ForwardAE, ForwardBE;
     input [2:0] ALUControlD, ImmSrcD;
     output PCSrcE, ResultSrcE0, RegWriteM, RegWriteW;
@@ -39,6 +39,7 @@ module Datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, 
     assign Rs2D = InstrD[24:20];
     assign RdD = InstrD[11:7];
     assign PCSrcE = JumpE | (BeqE & ZeroE) | (BneE & ~ZeroE) | (BltE & LTE) | (BgeE & ~LTE);
+    assign ResultSrcE0 = ResultSrcE[0];
 
     wire [31:0] FOUR = 32'd4;
 
@@ -49,12 +50,12 @@ module Datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, 
     Adder pcaddr1(PCF, FOUR, PCPLus4F);
 
     //decode
-    PipeLine_Register_FD pipe_reg_fd(clk, StallD, InstrF, PCF, PCPLus4F, InstrD, PCD, PCPlus4D);
-    Register_File reg_file(clk, rst, Rs1D, Rs2D, RdD, ResultW, RegWriteW, Rd1D, Rd2D);
+    PipeLine_Register_FD pipe_reg_fd(clk, rst, StallD, FlushD, InstrF, PCF, PCPLus4F, InstrD, PCD, PCPlus4D);
+    Register_File reg_file(clk, rst, Rs1D, Rs2D, RdW, ResultW, RegWriteW, Rd1D, Rd2D);
     Extend extnd(InstrD[31:7], ImmSrcD, ExtImmD);
 
     //execute
-    PipeLine_Register_DE pipe_reg_de(clk, FlushE, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, BltD,
+    PipeLine_Register_DE pipe_reg_de(clk, rst, FlushE, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, BltD,
                                     BgeD, ALUControlD, ALUSrcD, ImmSrcD, Rd1D, Rd2D, PCD, Rs1D, Rs2D, RdD, ExtImmD, PCPlus4D,
                                     RegWriteE, ResultSrcE, MemWriteE, JumpE, BeqE, BneE, BltE, BgeE, ALUControlE, ALUSrcE, 
                                     ImmSrcE, Rd1E, Rd2E, PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E);
@@ -65,12 +66,12 @@ module Datapath (clk, rst, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, 
     Adder pcaddr2(PCE, ExtImmE, PCTargetE);
 
     //memory
-    PipeLine_Register_EM pipe_reg_em(clk, RegWriteE, ResultSrcE, MemWriteE, ALUResultE, WriteDataE, RdE, PCPlus4E,
+    PipeLine_Register_EM pipe_reg_em(clk, rst, RegWriteE, ResultSrcE, MemWriteE, ALUResultE, WriteDataE, RdE, PCPlus4E,
                                     RegWriteM, ResultSrcM, MemWriteM, ALUResultM, WriteDataM, RdM, PCPlus4M);
     Data_Memory data_mem(clk, rst, ALUResultM, WriteDataM, MemWriteM, ReadDataM);
 
     //writeback
-    PipeLine_Register_MW pipe_reg_mw(clk, RegWriteM, ResultSrcM, ALUResultM, ReadDataM, RdM, PCPlus4M,
+    PipeLine_Register_MW pipe_reg_mw(clk, rst, RegWriteM, ResultSrcM, ALUResultM, ReadDataM, RdM, PCPlus4M,
                                     RegWriteW, ResultSrcW, ALUResultW, ReadDataW, RdW, PCPlus4W);
     mux_3to1_32bit write_sel_mux(ALUResultW, ReadDataW, PCPlus4W, ResultSrcW, ResultW);
 

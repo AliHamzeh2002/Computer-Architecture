@@ -7,7 +7,7 @@ module riscV_PL_TB();
 
     always #20 clk = ~clk;
 
-   // always @(posedge done) #10 $stop;
+    //always @(posedge done) #10 $stop;
 	initial begin
         
         

@@ -1,6 +1,6 @@
-module PipeLine_Register_MW(clk, RegWriteM, ResultSrcM, ALUResultM, ReadDataM, RdM, PCPlus4M,
+module PipeLine_Register_MW(clk, rst, RegWriteM, ResultSrcM, ALUResultM, ReadDataM, RdM, PCPlus4M,
                             RegWriteW, ResultSrcW, ALUResultW, ReadDataW, RdW, PCPlus4W);
-    input clk, RegWriteM;
+    input clk, rst, RegWriteM;
     input [1:0] ResultSrcM;
     input [4:0] RdM;
     input [31:0] ALUResultM, ReadDataM, PCPlus4M;
@@ -9,8 +9,10 @@ module PipeLine_Register_MW(clk, RegWriteM, ResultSrcM, ALUResultM, ReadDataM, R
     output reg [4:0] RdW;
     output reg [31:0] ALUResultW, ReadDataW, PCPlus4W;
 
-    always @(posedge clk) begin
-        RegWriteW = ReadDataM;
+    always @(posedge clk, posedge rst) begin
+        if (rst)
+            {RegWriteW, ResultSrcW, ALUResultW, ReadDataW, RdW, PCPlus4W} = 0;
+        RegWriteW = RegWriteM;
         ResultSrcW = ResultSrcM;
         ReadDataW = ReadDataM;
         RdW = RdM;

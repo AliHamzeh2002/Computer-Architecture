@@ -1,6 +1,6 @@
 module PipeLine_Register_EM (clk, rst, RegWriteE, ResultSrcE, MemWriteE, ALUResultE, WriteDataE, RdE, PCPlus4E,
                                 RegWriteM, ResultSrcM, MemWriteM, ALUResultM, WriteDataM, RdM, PCPlus4M);
-    input clk, RegWriteE, MemWriteE;
+    input clk, rst, RegWriteE, MemWriteE;
     input [1:0] ResultSrcE;
     input [4:0] RdE;
     input [31:0] ALUResultE, WriteDataE, PCPlus4E;
@@ -9,7 +9,9 @@ module PipeLine_Register_EM (clk, rst, RegWriteE, ResultSrcE, MemWriteE, ALUResu
     output reg [4:0] RdM;
     output reg [31:0] ALUResultM, WriteDataM, PCPlus4M;
 
-    always @(posedge clk) begin
+    always @(posedge clk, posedge rst) begin
+        if (rst)
+            {RegWriteM, ResultSrcM, MemWriteM, ALUResultM, WriteDataM, RdM, PCPlus4M} = 0;
         RegWriteM = RegWriteE;
         ResultSrcM = ResultSrcE;
         MemWriteM = MemWriteE;
