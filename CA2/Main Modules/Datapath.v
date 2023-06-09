@@ -1,5 +1,5 @@
-module Datapath_SC(clk, rst, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, op, func7, func3, Zero, lt);
-    input clk, rst, PCSrc, MemWrite, ALUSrc, RegWrite;
+module Datapath_SC(clk, rst, JumpTargetSel, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, op, func7, func3, Zero, lt);
+    input clk, rst, JumpTargetSel, PCSrc, MemWrite, ALUSrc, RegWrite;
     input [1:0] ResultSrc;
     input [2:0] ALUControl, ImmSrc;
     output [6:0] op;
@@ -8,7 +8,7 @@ module Datapath_SC(clk, rst, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, Imm
     output Zero, lt;
 
     wire [31:0] PCNext, PC, PCPLus4, ImmExt, PCTarget,
-                Instr, SrcA, SrcB, ALUResult, ReadData, Result, WriteData;
+                Instr, SrcA, SrcB, ALUResult, ReadData, Result, WriteData, PCPlusImmE;
 
     assign op = Instr[6:0];
     assign func3 = Instr[14:12];
@@ -26,6 +26,7 @@ module Datapath_SC(clk, rst, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, Imm
     mux_3to1_32bit mux3(ALUResult, ReadData, PCPLus4, ResultSrc, Result);
     Adder Plus4(PC, FOUR, PCPLus4);
     Extend Extnd(Instr[31:7], ImmSrc, ImmExt);
-    Adder ADD(PC, ImmExt, PCTarget);
+    Adder ADD(PC, ImmExt, PCPlusImmE);
+    mux_2to1_32bit mux4(PCPlusImmE, ALUResult, JumpTargetSel, PCTarget);
     
 endmodule

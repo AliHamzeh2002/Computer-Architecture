@@ -8,12 +8,12 @@ module riscV_SC(clk, rst, done);
 
 	wire Zero, lt;
 
-	wire PCSrc, MemWrite, ALUSrc, RegWrite;
+	wire JumpTargetSel, PCSrc, MemWrite, ALUSrc, RegWrite;
 
 	wire [1:0] ResultSrc;
 
-	Controller_SC CU(op, funct3, funct7, Zero, lt, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, done);
+	Controller_SC CU(op, funct3, funct7, Zero, lt, JumpTargetSel, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, done);
     
-	Datapath_SC DP(clk, rst, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, op, funct7, funct3, Zero, lt);
+	Datapath_SC DP(clk, rst, JumpTargetSel, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, op, funct7, funct3, Zero, lt);
 
 endmodule

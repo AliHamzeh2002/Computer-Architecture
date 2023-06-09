@@ -3,7 +3,7 @@ module riscV_SC_TB();
     reg clk = 1'b0, rst = 1'b1;
     wire done;
 
-    risc_v risc5_SC(clk, rst, done);
+    riscV_SC risc5_SC(clk, rst, done);
 
     always #20 clk = ~clk;
 

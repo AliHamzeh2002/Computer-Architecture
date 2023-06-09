@@ -7,7 +7,7 @@
 `define jal  7'b1101111
 `define lui  7'b0110111
 
-module Controller_SC(op, func3, func7, Zero, lt, 
+module Controller_SC(op, func3, func7, Zero, lt, JumpTargetSel,
     PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, done);
     
     input [6:0] op, func7;
@@ -15,7 +15,7 @@ module Controller_SC(op, func3, func7, Zero, lt,
     input Zero, lt;
 
     output PCSrc;
-    output reg MemWrite, ALUSrc, RegWrite;
+    output reg JumpTargetSel, MemWrite, ALUSrc, RegWrite;
     output reg [1:0] ResultSrc;
     output reg [2:0] ImmSrc;
     output [2:0] ALUControl;
@@ -56,7 +56,7 @@ module Controller_SC(op, func3, func7, Zero, lt,
 
 
     always@(op, func3, func7) begin
-        {MemWrite, ALUSrc, RegWrite, jmp, branch, done} = 6'b0;
+        {JumpTargetSel, MemWrite, ALUSrc, RegWrite, jmp, branch, done} = 7'b0;
 
         ResultSrc = 2'b00;
 
@@ -80,7 +80,7 @@ module Controller_SC(op, func3, func7, Zero, lt,
 
       `jal:  begin RegWrite = 1; ImmSrc = 3'b011; ResultSrc = 2'b10; jmp = 1; end
 
-      `jalr: begin RegWrite = 1; ALUSrc = 1; jmp = 1; end
+      `jalr: begin RegWrite = 1; ALUSrc = 1; jmp = 1; JumpTargetSel = 1; end
 
       `lui:  begin RegWrite = 1; ImmSrc = 3'b100; aluOp = 2'b11; end
       default: done = 1;
