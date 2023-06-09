@@ -23,14 +23,14 @@ module PipeLine_Register_DE(clk, rst, CLR, RegWriteD, ResultSrcD, MemWriteD, Jum
             BeqE = BeqD;
             BneE = BneD;
             BltE = BltD;
-            BgeE = BgeE;
+            BgeE = BgeD;
             ALUControlE = ALUControlD;
             ALUSrcE = ALUSrcD;
             ImmSrcE = ImmSrcD;
             Rd1E = Rd1D;
             Rd2E = Rd2D;
             PCE = PCD;
-            Rs1E = Rs2D;
+            Rs1E = Rs1D;
             Rs2E = Rs2D;
             RdE = RdD;
             ExtImmE = ExtImmD;

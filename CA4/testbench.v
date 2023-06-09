@@ -7,14 +7,17 @@ module riscV_PL_TB();
 
     always #20 clk = ~clk;
 
-    //always @(posedge done) #10 $stop;
+    // always begin
+         
+    //      #50;
+    //      if (done)
+    //         #50 $stop;
+
+    // end
+
 	initial begin
-        
-        
         #10 rst = 1'b0;
-        #100000 $stop;
-
-
+        #10000 $stop;
     end
 
 endmodule
