@@ -10,7 +10,7 @@ module Data_Memory(clk, rst, A, WD, WE, RD);
 
 	always @(posedge clk or posedge rst) begin
         if (rst)
-            $readmemh("tests/test1/DataMemory.txt", DataMem);
+            $readmemh("tests/test2/DataMemory.txt", DataMem);
 
 		else if (WE) 
             DataMem[A>>2] = WD;

@@ -5,7 +5,7 @@ module Instruction_Memory(A, RD);
     reg [31:0] InstMem[15999:0];
 
     initial begin
-        $readmemh("tests/test1/AssemblyHexCode.txt", InstMem);
+        $readmemh("tests/test2/AssemblyHexCode.txt", InstMem);
     end
 
     assign RD = InstMem[A>>2];
