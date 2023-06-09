@@ -6,7 +6,7 @@ module PipeLine_Register_FD(clk, rst, EN, CLR, InstrF, PCF, PCPlus4F, InstrD, PC
     always @(posedge clk, posedge rst) begin
         if (rst || CLR)
             {InstrD, PCPlus4D, PCD} = 0;
-        if (~EN)begin
+        else if (~EN)begin
             InstrD = InstrF;
             PCPlus4D = PCPlus4F;
             PCD = PCF;

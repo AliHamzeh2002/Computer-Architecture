@@ -7,13 +7,13 @@
 `define jal  7'b1101111
 `define lui  7'b0110111
 
-module Controller(op, func3, func7, RegWriteD, ResultSrcD, MemWriteD, JumpD, BeqD, BneD, BltD, BgeD, ALUControlD, ALUSrcD, ImmSrcD, done);
+module Controller(op, func3, func7, RegWriteD, ResultSrcD, MemWriteD, JumpSelD, JumpD, BeqD, BneD, BltD, BgeD, ALUControlD, ALUSrcD, ImmSrcD, done);
     
     input [6:0] op, func7;
     input [2:0] func3;
 
     output BeqD, BneD, BltD, BgeD;
-    output reg MemWriteD, ALUSrcD, RegWriteD, JumpD;
+    output reg MemWriteD, ALUSrcD, RegWriteD, JumpD, JumpSelD;
     output reg [1:0] ResultSrcD;
     output reg [2:0] ImmSrcD;
     output [2:0] ALUControlD;
@@ -50,7 +50,7 @@ module Controller(op, func3, func7, RegWriteD, ResultSrcD, MemWriteD, JumpD, Beq
 
 
     always@(op, func3, func7) begin
-        {MemWriteD, ALUSrcD, RegWriteD, JumpD, branch, done} = 6'b0;
+        {MemWriteD, ALUSrcD, RegWriteD, JumpSelD, JumpD, branch, done} = 7'b0;
 
         ResultSrcD = 2'b00;
 
@@ -72,7 +72,7 @@ module Controller(op, func3, func7, RegWriteD, ResultSrcD, MemWriteD, JumpD, Beq
 
       `jal:  begin RegWriteD = 1; ImmSrcD = 3'b011; ResultSrcD = 2'b10; JumpD = 1; end
 
-      `jalr: begin RegWriteD = 1; ALUSrcD = 1; JumpD = 1; end
+      `jalr: begin RegWriteD = 1; ALUSrcD = 1; JumpD = 1; JumpSelD = 1; end
 
       `lui:  begin RegWriteD = 1; ImmSrcD = 3'b100; aluOp = 2'b11; end
       default: done = 1;

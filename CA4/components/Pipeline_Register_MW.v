@@ -12,12 +12,13 @@ module PipeLine_Register_MW(clk, rst, RegWriteM, ResultSrcM, ALUResultM, ReadDat
     always @(posedge clk, posedge rst) begin
         if (rst)
             {RegWriteW, ResultSrcW, ALUResultW, ReadDataW, RdW, PCPlus4W} = 0;
-        RegWriteW = RegWriteM;
-        ResultSrcW = ResultSrcM;
-        ReadDataW = ReadDataM;
-        RdW = RdM;
-        PCPlus4W = PCPlus4M;
-        ALUResultW = ALUResultM;
+        else 
+            RegWriteW = RegWriteM;
+            ResultSrcW = ResultSrcM;
+            ReadDataW = ReadDataM;
+            RdW = RdM;
+            PCPlus4W = PCPlus4M;
+            ALUResultW = ALUResultM;
     end
 
 endmodule

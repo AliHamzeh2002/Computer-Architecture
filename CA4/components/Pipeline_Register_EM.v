@@ -12,13 +12,14 @@ module PipeLine_Register_EM (clk, rst, RegWriteE, ResultSrcE, MemWriteE, ALUResu
     always @(posedge clk, posedge rst) begin
         if (rst)
             {RegWriteM, ResultSrcM, MemWriteM, ALUResultM, WriteDataM, RdM, PCPlus4M} = 0;
-        RegWriteM = RegWriteE;
-        ResultSrcM = ResultSrcE;
-        MemWriteM = MemWriteE;
-        ALUResultM = ALUResultE;
-        WriteDataM = WriteDataE;
-        RdM = RdE;
-        PCPlus4M = PCPlus4E;
+        else
+            RegWriteM = RegWriteE;
+            ResultSrcM = ResultSrcE;
+            MemWriteM = MemWriteE;
+            ALUResultM = ALUResultE;
+            WriteDataM = WriteDataE;
+            RdM = RdE;
+            PCPlus4M = PCPlus4E;
     end
 
 endmodule
