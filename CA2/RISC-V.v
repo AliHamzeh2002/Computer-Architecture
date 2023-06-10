@@ -9,7 +9,6 @@ module riscV_SC(clk, rst, done);
 	wire Zero, lt;
 
 	wire JumpTargetSel, PCSrc, MemWrite, ALUSrc, RegWrite;
-
 	wire [1:0] ResultSrc;
 
 	Controller_SC CU(op, funct3, funct7, Zero, lt, JumpTargetSel, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, done);

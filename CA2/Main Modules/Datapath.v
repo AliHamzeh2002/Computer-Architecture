@@ -9,7 +9,7 @@ module Datapath_SC(clk, rst, JumpTargetSel, PCSrc, ResultSrc, MemWrite, ALUContr
     output [6:0] func7;
     output [2:0] func3;
     output Zero, lt;
-
+    // Wire and regs
     wire [31:0] PCNext, PC, PCPLus4, ImmExt, PCTarget,
                 Instr, SrcA, SrcB, ALUResult, ReadData, Result, WriteData, PCPlusImmE;
 
