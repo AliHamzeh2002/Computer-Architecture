@@ -1,7 +1,10 @@
-module Datapath_SC(clk, rst, JumpTargetSel, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite, op, func7, func3, Zero, lt);
+module Datapath_SC(clk, rst, JumpTargetSel, PCSrc, ResultSrc, MemWrite, ALUControl, ALUSrc, ImmSrc, RegWrite,
+    op, func7, func3, Zero, lt);
+    // Input ports
     input clk, rst, JumpTargetSel, PCSrc, MemWrite, ALUSrc, RegWrite;
     input [1:0] ResultSrc;
     input [2:0] ALUControl, ImmSrc;
+    // Output ports
     output [6:0] op;
     output [6:0] func7;
     output [2:0] func3;
