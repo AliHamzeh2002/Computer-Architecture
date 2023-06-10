@@ -8,7 +8,7 @@ module Register32Bit(clk, rst, we, nxt, cur);
     always @(posedge clk or posedge rst) begin
         if (rst)
             cur = `DefaultValue;
-        else if (we)
+        else if (we == 1'b1)
             cur = nxt;
     end
 

@@ -66,7 +66,7 @@ module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
 
 
 
-    always@(op, func3, func7) begin
+    always@(ps, beq, bne, blt, bge, Zero, lt, op, func3, func7) begin
         ns = `S0;
         {ResultSrc, ALUSrcB, ALUSrcA, ALUOp, ImmSrc, PCWrite, AdrSrc, MemWrite, IRWrite, RegWrite, branch, done} = 18'd0;
 
