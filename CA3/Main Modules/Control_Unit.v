@@ -67,23 +67,14 @@ module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
 
 
     always@(ps, beq, bne, blt, bge, Zero, lt, op, func3, func7) begin
-        ns = `S0;
         {ResultSrc, ALUSrcB, ALUSrcA, ALUOp, ImmSrc, PCWrite, AdrSrc, MemWrite, IRWrite, RegWrite, branch, done} = 18'd0;
 
         case(ps)
-            `S0:  begin IRWrite = 1; ALUSrcB = 2'b10; ResultSrc = 2'b10; PCWrite = 1; ns = `S1; end
+            `S0:  begin IRWrite = 1; ALUSrcB = 2'b10; ResultSrc = 2'b10; PCWrite = 1;end
             `S1:  begin 
                 ALUSrcB = 2'b01; 
                 ALUSrcA = 2'b01;
                 ImmSrc = 3'b010; 
-                ns= (op == `lw) ? `S3 :
-      	            (op == `sw) ?   `S6 :
-      	            (op == `RT) ?   `S8 :
-      	            (op == `BT) ?   `S2 :
-      	            (op == `IT) ?   `S10 :
-      	            (op == `jalr) ? `S12 :
-      	            (op == `jal) ?  `S15 :
-      	            (op == `lui) ?  `S18 : `S20;
             end
     	    `S2:  begin 
                 ALUSrcA = 2'b10; 
@@ -94,28 +85,63 @@ module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
 					(bne & ~Zero) ? 1 :
 					(blt & lt) ? 1 :
 					(bge & ~lt) ? 1 : 0;
-		        ns = `S0; 
             end
-            `S3:  begin ALUSrcA = 2'b10; ALUSrcB = 2'b01; ns = `S4; end
-            `S4:  begin AdrSrc = 1; ns = `S5; end
-            `S5:  begin ResultSrc = 2'b01; RegWrite = 1; ns = `S0; end
-            `S6:  begin ImmSrc = 3'b001; ALUSrcA = 2'b10; ALUSrcB = 2'b01; ns = `S7; end
-            `S7:  begin AdrSrc = 1; MemWrite = 1; ns = `S0; end
-            `S8:  begin ALUSrcA = 2'b10; ALUOp = 2'b10; ns = `S9; end
-            `S9:  begin RegWrite = 1; ns = `S0; end
-            `S10: begin ALUSrcA = 2'b10; ALUSrcB = 2'b01; ALUOp = 2'b10; ns = `S11; end
-            `S11: begin RegWrite = 1; ns = `S0; end
-            `S12: begin ALUSrcA = 2'b10; ALUSrcB = 2'b01; ns = `S13; end
-            `S13: begin PCWrite = 1; ALUSrcA = 2'b01; ALUSrcB = 2'b10; ns = `S14; end
-            `S14: begin RegWrite = 1; ns = `S0; end
-            `S15: begin ALUSrcA = 2'b01; ALUSrcB = 2'b01; ImmSrc = 3'b011; ns = `S16; end
-            `S16: begin PCWrite = 1; ALUSrcA = 2'b01; ALUSrcB = 2'b10; ns = `S17; end
-            `S17: begin RegWrite = 1; ns = `S0; end
-            `S18: begin ImmSrc = 3'b100; ALUSrcB = 2'b01; ALUOp = 2'b11; ns = `S19; end
-            `S19: begin RegWrite = 1; ns = `S0; end
-  	        `S20: begin done = 1; ns = `S20; end
+            `S3:  begin ALUSrcA = 2'b10; ALUSrcB = 2'b01; end
+            `S4:  begin AdrSrc = 1; end
+            `S5:  begin ResultSrc = 2'b01; RegWrite = 1;  end
+            `S6:  begin ImmSrc = 3'b001; ALUSrcA = 2'b10; ALUSrcB = 2'b01; end
+            `S7:  begin AdrSrc = 1; MemWrite = 1; end
+            `S8:  begin ALUSrcA = 2'b10; ALUOp = 2'b10; end
+            `S9:  begin RegWrite = 1; end
+            `S10: begin ALUSrcA = 2'b10; ALUSrcB = 2'b01; ALUOp = 2'b10; end
+            `S11: begin RegWrite = 1; end
+            `S12: begin ALUSrcA = 2'b10; ALUSrcB = 2'b01;end
+            `S13: begin PCWrite = 1; ALUSrcA = 2'b01; ALUSrcB = 2'b10; end
+            `S14: begin RegWrite = 1;end
+            `S15: begin ALUSrcA = 2'b01; ALUSrcB = 2'b01; ImmSrc = 3'b011;end
+            `S16: begin PCWrite = 1; ALUSrcA = 2'b01; ALUSrcB = 2'b10; end
+            `S17: begin RegWrite = 1; end
+            `S18: begin ImmSrc = 3'b100; ALUSrcB = 2'b01; ALUOp = 2'b11; end
+            `S19: begin RegWrite = 1;  end
+  	        `S20: begin done = 1; end
         endcase
 
+    end
+
+    always@(ps, op) begin
+        ns = `S0;
+        case(ps)
+            `S0: ns = `S1; 
+            `S1:  begin 
+                ns= (op == `lw) ? `S3 :
+      	            (op == `sw) ?   `S6 :
+      	            (op == `RT) ?   `S8 :
+      	            (op == `BT) ?   `S2 :
+      	            (op == `IT) ?   `S10 :
+      	            (op == `jalr) ? `S12 :
+      	            (op == `jal) ?  `S15 :
+      	            (op == `lui) ?  `S18 : `S20;
+            end
+    	    `S2: ns = `S0; 
+            `S3: ns = `S4;
+            `S4: ns = `S5;
+            `S5: ns = `S0;
+            `S6: ns = `S7;
+            `S7: ns = `S0;
+            `S8: ns = `S9;
+            `S9: ns = `S0;
+            `S10: ns = `S11; 
+            `S11: ns = `S0; 
+            `S12: ns = `S13; 
+            `S13: ns = `S14; 
+            `S14: ns = `S0;
+            `S15: ns = `S16; 
+            `S16: ns = `S17;
+            `S17: ns = `S0;
+            `S18: ns = `S19;
+            `S19: ns = `S0;
+  	        `S20: ns = `S20;
+        endcase
     end
 
     always@(posedge clk) begin
