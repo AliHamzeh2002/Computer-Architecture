@@ -53,8 +53,6 @@ module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
     assign blt = branch & (func3 == 3'b100);
     assign bge = branch & (func3 == 3'b101);
 
-    assign PCSrc = jmp | (beq & Zero) | (bne & ~Zero) | (blt & lt) | (bge & ~lt);
-
     assign ALUControl = 
         (ALUOp == 2'b00) ? 3'b000 :
         (ALUOp == 2'b01) ? 3'b001 :
@@ -70,7 +68,7 @@ module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
 
     always@(op, func3, func7) begin
         ns = `S0;
-        {ResultSrc, AluSrcB, AluSrcA, AluOp, ImmSrc, PCWrite, AdrSrc, MemWrite, IRWrite, RegWrite, branch, done} = 18'd0;
+        {ResultSrc, ALUSrcB, ALUSrcA, ALUOp, ImmSrc, PCWrite, AdrSrc, MemWrite, IRWrite, RegWrite, branch, done} = 18'd0;
 
         case(ps)
             `S0:  begin IRWrite = 1; ALUSrcB = 2'b10; ResultSrc = 2'b10; PCWrite = 1; ns = `S1; end
