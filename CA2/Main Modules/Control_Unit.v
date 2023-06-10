@@ -34,10 +34,10 @@ module Controller_SC(op, func3, func7, Zero, lt, JumpTargetSel,
     assign PCSrc = jmp | (beq & Zero) | (bne & ~Zero) | (blt & lt) | (bge & ~lt);
 
     assign ALUControl = 
-        (ALUOp == 2'b00) ? 3'b000 :
-        (ALUOp == 2'b01) ? 3'b001 :
-        (ALUOp == 2'b11) ? 3'b100 :
-        (ALUOp == 2'b10) ? 
+        (aluOp == 2'b00) ? 3'b000 :
+        (aluOp == 2'b01) ? 3'b001 :
+        (aluOp == 2'b11) ? 3'b100 :
+        (aluOp == 2'b10) ? 
         (func3 == 3'b000) ? ((op == `RT & func7 == 7'b0100000) ? 3'b001: 3'b000) :
         (func3 == 3'b111) ? 3'b010 :
         (func3 == 3'b100) ? 3'b111 :
