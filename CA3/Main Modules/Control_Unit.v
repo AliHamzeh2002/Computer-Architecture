@@ -16,7 +16,7 @@
 `define S6  5'd6
 `define S7  5'd7
 `define S8  5'd8
-`define S9  5'd9
+`define S9 5'd9
 `define S10 5'd10
 `define S11 5'd11
 `define S12 5'd12
@@ -24,10 +24,6 @@
 `define S14 5'd14
 `define S15 5'd15
 `define S16 5'd16
-`define S17 5'd17
-`define S18 5'd18
-`define S19 5'd19
-`define S20 5'd20
 
 module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
     AdrSrc, ResultSrc, PCWrite, IRWrite, MemWrite, ALUControl, ALUSrcA, ALUSrcB, ImmSrc, RegWrite, done);
@@ -92,18 +88,14 @@ module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
             `S6:  begin ImmSrc = 3'b001; ALUSrcA = 2'b10; ALUSrcB = 2'b01; end
             `S7:  begin AdrSrc = 1; MemWrite = 1; end
             `S8:  begin ALUSrcA = 2'b10; ALUOp = 2'b10; end
-            `S9:  begin RegWrite = 1; end
-            `S10: begin ALUSrcA = 2'b10; ALUSrcB = 2'b01; ALUOp = 2'b10; end
-            `S11: begin RegWrite = 1; end
-            `S12: begin ALUSrcA = 2'b10; ALUSrcB = 2'b01;end
+            `S9: begin ALUSrcA = 2'b10; ALUSrcB = 2'b01; ALUOp = 2'b10; end
+            `S10: begin ALUSrcA = 2'b10; ALUSrcB = 2'b01;end
+            `S11: begin PCWrite = 1; ALUSrcA = 2'b01; ALUSrcB = 2'b10; end
+            `S12: begin ALUSrcA = 2'b01; ALUSrcB = 2'b01; ImmSrc = 3'b011;end
             `S13: begin PCWrite = 1; ALUSrcA = 2'b01; ALUSrcB = 2'b10; end
-            `S14: begin RegWrite = 1;end
-            `S15: begin ALUSrcA = 2'b01; ALUSrcB = 2'b01; ImmSrc = 3'b011;end
-            `S16: begin PCWrite = 1; ALUSrcA = 2'b01; ALUSrcB = 2'b10; end
-            `S17: begin RegWrite = 1; end
-            `S18: begin ImmSrc = 3'b100; ALUSrcB = 2'b01; ALUOp = 2'b11; end
-            `S19: begin RegWrite = 1;  end
-  	        `S20: begin done = 1; end
+            `S14: begin ImmSrc = 3'b100; ALUSrcB = 2'b01; ALUOp = 2'b11; end
+            `S15: begin RegWrite = 1; end
+  	        `S16: begin done = 1; end
         endcase
 
     end
@@ -117,30 +109,25 @@ module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
       	            (op == `sw) ?   `S6 :
       	            (op == `RT) ?   `S8 :
       	            (op == `BT) ?   `S2 :
-      	            (op == `IT) ?   `S10 :
-      	            (op == `jalr) ? `S12 :
-      	            (op == `jal) ?  `S15 :
-      	            (op == `lui) ?  `S18 : `S20;
+      	            (op == `IT) ?   `S9 :
+      	            (op == `jalr) ? `S10 :
+      	            (op == `jal) ?  `S12 :
+      	            (op == `lui) ?  `S14 : `S16;
             end
     	    `S2: ns = `S0; 
             `S3: ns = `S4;
             `S4: ns = `S5;
             `S5: ns = `S0;
-            `S6: ns = `S7;
-            `S7: ns = `S0;
-            `S8: ns = `S9;
-            `S9: ns = `S0;
+            `S6: ns = `S15;
+            `S8: ns = `S15;
+            `S9: ns = `S15; 
             `S10: ns = `S11; 
-            `S11: ns = `S0; 
+            `S11: ns = `S15; 
             `S12: ns = `S13; 
-            `S13: ns = `S14; 
-            `S14: ns = `S0;
-            `S15: ns = `S16; 
-            `S16: ns = `S17;
-            `S17: ns = `S0;
-            `S18: ns = `S19;
-            `S19: ns = `S0;
-  	        `S20: ns = `S20;
+            `S13: ns = `S15;
+            `S14: ns = `S15;
+            `S15: ns = `S0;
+  	        `S16: ns = `S16;
         endcase
     end
 
