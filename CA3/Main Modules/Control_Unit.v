@@ -114,11 +114,12 @@ module Controller_MC(clk, rst, op, func3, func7, Zero, lt,
       	            (op == `jal) ?  `S12 :
       	            (op == `lui) ?  `S14 : `S16;
             end
-    	    `S2: ns = `S0; 
+    	    `S2: ns = `S0;
             `S3: ns = `S4;
             `S4: ns = `S5;
             `S5: ns = `S0;
             `S6: ns = `S15;
+            `S7: ns = `S0;
             `S8: ns = `S15;
             `S9: ns = `S15; 
             `S10: ns = `S11; 
