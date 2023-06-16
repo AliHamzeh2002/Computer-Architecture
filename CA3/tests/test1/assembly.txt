@@ -1,4 +1,5 @@
-lui s0, 0x00000
+lui s0, 0x00002
+ori s0, s0, 0x328
 add s1, zero, zero
 lw s2, 0(s0)
 addi t2, zero, 0x00028
